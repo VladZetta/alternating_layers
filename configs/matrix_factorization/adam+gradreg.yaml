@@ -1,0 +1,12 @@
+dataset_path: "dataset/matrix_dataset/random_matrices_dataset.h5"
+method: "Adam+GradReg"  
+learning_rates: [0.1]
+latent_dims: [5]
+num_epochs: 500
+lambda_reg: 0.01
+mixed: true  # Enable FO + SO optimization
+variant: "GradReg"  # Specify the variant for the second-order method (e.g., GradReg, None)
+optimizer: "Adam"  # First-order optimizer
+L_values: [0.1,1.0]
+reg_values: [0.0]
+save_dir: "results/matrix_factorization"

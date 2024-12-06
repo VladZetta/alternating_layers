@@ -1,0 +1,13 @@
+data: cifar10
+device: cuda:0
+batch_size: 64
+random_seed: 42
+num_epochs: 20
+optimizer1: adam
+learning_rate1: 0.001
+optimizer2: gradreg
+learning_rate2: 0.01
+lambd: 0.1
+lipschitz: 1.0
+momentum: 0.9
+verbose: 1

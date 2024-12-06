@@ -1,0 +1,12 @@
+dataset_path: "dataset/matrix_dataset/random_matrices_dataset.h5"
+method: "GD+GD"  
+learning_rates: [0.01,0.001]
+latent_dims: [5, 10]
+num_epochs: 500
+lambda_reg: 0.01
+mixed: false  # Enable FO + SO optimization
+variant: "GradReg"  # Specify the variant for the second-order method (e.g., GradReg, None)
+optimizer: "SGD"  # First-order optimizer
+L_values: [1.0]
+reg_values: [0.0]
+save_dir: "results/matrix_factorization"

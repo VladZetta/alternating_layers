@@ -1,5 +1,5 @@
 import torch
-from  utils import tuple_to_vec, line_search, derivatives
+from  second_order.utils import tuple_to_vec, line_search, derivatives
 
 EPS = 1e-8
 

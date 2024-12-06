@@ -1,6 +1,6 @@
 import torch
 from torch.optim.optimizer import Optimizer
-from utils import tuple_to_vec, subproblem_solver
+from second_order.utils import tuple_to_vec, subproblem_solver
 
 class DampedNewton(Optimizer):
     """Implements different versions of Damped Newton Method.

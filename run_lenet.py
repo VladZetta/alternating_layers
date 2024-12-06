@@ -10,11 +10,12 @@ from tests.lenet import Runner
 from models.lenet import LeNet5
 from second_order.damped_newton import DampedNewton
 
+
 # Set default environment variables
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["TORCH_DEVICE"] = "cuda"
 
-EXPERIMENTS_DIR = "results/lenet5"
+EXPERIMENTS_DIR = "results"
 
 def load_config(config_path):
     """Load configuration from YAML file."""
@@ -28,6 +29,9 @@ def main(config):
     device = torch.device(config["device"] if torch.cuda.is_available() else "cpu")
     torch.manual_seed(config["random_seed"])
 
+    if args.batch_size:
+        config["batch_size"] = args.batch_size
+
     # Data setup
     if config["data"] == "cifar10":
         model = LeNet5(10, 3)
@@ -39,7 +43,16 @@ def main(config):
             device=device,
             verbose=config["verbose"],
         )
-        train_loader, test_loader = cifar10_dataloaders(batch_size=config["batch_size"])
+        train_loader, test_loader = cifar10_dataloaders(
+                        batch_size=config["batch_size"],
+                        num_workers=0,  # Adjust based on CPU cores
+                        pin_memory=True
+                    )
+
+
+    
+    if config.get("optimizer2", None) == "None":
+        config["optimizer2"] = None
 
     # Optimizer setup
     if config["optimizer2"] is None:
@@ -104,6 +117,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--config", type=str, required=True, help="Path to the configuration file."
     )
+    parser.add_argument("--batch_size", type=int, help="Override batch size from config")
     args = parser.parse_args()
 
     config_path = args.config

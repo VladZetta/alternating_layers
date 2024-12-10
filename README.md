@@ -9,7 +9,22 @@ This project explores an **alternating optimization approach** for training neur
 ### Key Highlight:
 - **Faster Convergence with Second-Order Methods**: Second-order methods significantly reduce the number of epochs needed to achieve better results. However, they are more computationally intensive than first-order methods and require more hyperparameters to tune.
 
+### Results
 
+#### Matrix Factorization
+Here is an example result for **Matrix Factorization** with the `adam` and `gradreg` methods:
+
+![Matrix Factorization Results](results//matrix_factorization_result.png)
+
+#### Attention Layer
+Here is an example result for **Attention Layer** optimization with gradient descent:
+
+![Attention Layer Results](images/attention_layer_result.png)
+
+#### LeNet-5 Training
+Here is an example result for **LeNet-5 Training** with the Adam optimizer:
+
+![LeNet-5 Training Results](images/lenet5_training_result.png)
 
 ---
 ## Requirements

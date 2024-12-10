@@ -87,6 +87,7 @@ class Runner:
         accuracy_test_vals = []
         epoch_times = []
 
+        
         loss_test, accuracy_test = self.test(test_loader)
         loss_test_vals.append(loss_test)
         accuracy_test_vals.append(accuracy_test)
@@ -97,8 +98,8 @@ class Runner:
 
         epoch_times.append(0.)
 
-        if self.verbose >= 1:
-            print(f"Epoch 0/{num_epochs} Train loss: {loss_train:.4f} Test loss: {loss_test:.4f} Train accuracy: {accuracy_train:.4f} Test accuracy: {accuracy_test:.4f}")
+        
+        print(f"Epoch 0/{num_epochs} Train loss: {loss_train:.4f} Test loss: {loss_test:.4f} Train accuracy: {accuracy_train:.4f} Test accuracy: {accuracy_test:.4f}")
         
         for epoch in range(num_epochs):
             loss_train, accuracy_train, epoch_time = self.train_one_epoch(train_loader=train_loader, test_loader=test_loader, optimizer1=optimizer1, optimizer2=optimizer2)
@@ -110,10 +111,13 @@ class Runner:
             accuracy_test_vals.append(accuracy_test)
             epoch_times.append(epoch_time)
 
-            if self.verbose >= 2:
-                print(f"Epoch: {epoch+1}/{num_epochs} Train loss: {loss_train:.4f} Test loss: {loss_test:.4f} Train accuracy: {accuracy_train:.4f} Test accuracy: {accuracy_test:.4f}")
-            elif self.verbose >= 1 and (epoch + 1 == num_epochs):
-                print(f"Epoch: {epoch+1}/{num_epochs} Train loss: {loss_train:.4f} Test loss: {loss_test:.4f} Train accuracy: {accuracy_train:.4f} Test accuracy: {accuracy_test:.4f}")
+            print(
+            f"Epoch {epoch}/{num_epochs} "
+            f"Train Loss: {loss_train:.4f}, Train Accuracy: {accuracy_train:.4f}%, "
+            f"Test Loss: {loss_test:.4f}, Test Accuracy: {accuracy_test:.4f}%, "
+            f"Time: {epoch_time:.2f}s"
+            )
+            
         results = {
             "loss": {
                 "train": loss_train_vals,

@@ -33,6 +33,15 @@ Here is an example result for **LeNet-5 Training**
   ```bash
   pip install -r requirements.txt
 
+## Project Structure
+
+- **`run.py`**: Script for running Matrix Factorization and Attention Layer experiments.
+- **`run_lenet.py`**: Script for training LeNet-5.
+- **`configs/`**: Contains configuration files for various experiments.
+- **`results/`**: Directory where experiment outputs are saved.
+- **`scripts/`**: Contains bash scripts for automating common tasks.
+
+
 ## Running the Code
 
 The experiments can be executed using the `run.py` or `run_lenet.py` files depending on the experiment. For convenience, bash scripts are also available to automate common tasks.

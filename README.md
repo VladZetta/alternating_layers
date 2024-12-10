@@ -41,4 +41,4 @@ The experiments can be executed using the `run.py` or `run_lenet.py` files depen
  Bash scripts to streamline experiments can be found in the scripts/ folder. In particular, use run_batches.sh to execute LeNet-5 Training with different batch sizes.
 
 ### Results Directory
-All experimental results are saved in the results/ directory with filenames corresponding to the specific experiment. This ensures easy tracking and analysis of outcomes.
+All experimental results are saved in the results/ directory with filenames corresponding to the specific experiment. 

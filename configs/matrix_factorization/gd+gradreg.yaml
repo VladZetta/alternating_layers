@@ -2,7 +2,7 @@ dataset_path: "dataset/matrix_dataset/random_matrices_dataset.h5"
 method: "GD+GradReg"  
 learning_rates: [0.001]
 latent_dims: [5]
-num_epochs: 500
+num_epochs: 100
 lambda_reg: 0.01
 mixed: true  # Enable FO + SO optimization
 variant: "GradReg"  # Specify the variant for the second-order method (e.g., GradReg, None)

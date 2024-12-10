@@ -1,8 +1,8 @@
 dataset_path: "dataset/matrix_dataset/random_matrices_dataset.h5"
 method: "Adam+Adam"  
-learning_rates: [0.1, 0.5]
-latent_dims: [5, 10]
-num_epochs: 500
+learning_rates: [0.1]
+latent_dims: [5]
+num_epochs: 100
 lambda_reg: 0.01
 mixed: false  # Enable FO + SO optimization
 variant: "GradReg"  # Specify the variant for the second-order method (e.g., GradReg, None)

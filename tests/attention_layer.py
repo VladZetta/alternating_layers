@@ -29,7 +29,7 @@ class StandaloneAttention(nn.Module):
     def forward(self, x):
         attn_output, _ = self.attention(x, x, x)
         return attn_output
-
+    
 def train_attention_layer(attention_layer, dataloader, criterion, optimizer_P, num_epochs, save_dir, 
                           mixed=False, optimizer_Q=None, variant=None, L=None, reg=None, method=None, lr=None):
     """Train the attention layer and save results in organized subfolders."""
@@ -44,6 +44,22 @@ def train_attention_layer(attention_layer, dataloader, criterion, optimizer_P, n
     epoch_losses = []
     epoch_gradient_norms = []
 
+    # Record initial loss
+    with torch.no_grad():
+        initial_loss = 0.0
+        for input_data, target_output in dataloader:
+            outputs = attention_layer(input_data)
+            loss = criterion(outputs, target_output)
+            initial_loss += loss.item()
+        initial_loss /= len(dataloader)
+    print(f"Initial Loss (before training): {initial_loss:.4f}")
+    
+    # Add the initial loss to epoch losses
+    epoch_losses.append(initial_loss)
+    # Add a placeholder (e.g., 0) for gradient norm at initialization
+    epoch_gradient_norms.append(0.0)
+
+    # Training loop
     for epoch in range(num_epochs):
         running_loss = 0.0
         running_grad_norm = 0.0
@@ -86,6 +102,10 @@ def train_attention_layer(attention_layer, dataloader, criterion, optimizer_P, n
         epoch_gradient_norms.append(avg_grad_norm)
 
         print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {avg_loss:.4f}, Gradient Norm: {avg_grad_norm:.4f}")
+
+    
+
+    
 
     # Generate a unique filename based on hyperparameters and settings
     if not mixed:
@@ -161,6 +181,7 @@ def run(config_path, optimizer_class):
     optimizer_P = optimizer_class(fo_parameters, lr=learning_rate)
 
     if mixed:
+        print(variant, type(variant))
         # Second-order optimizer for mixed optimization
         optimizer_Q = DampedNewton(
             so_parameters, 

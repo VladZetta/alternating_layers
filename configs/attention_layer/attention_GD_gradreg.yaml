@@ -2,7 +2,7 @@ embed_dim: 16
 seq_len: 10
 batch_size: 64
 total_samples: 10000
-num_epochs: 50  
+num_epochs: 20  
 learning_rate: 0.5
 save_dir: "results/attention_layer"
 mixed: true           # Use mixed optimization (FO + SO)

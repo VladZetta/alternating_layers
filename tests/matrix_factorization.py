@@ -34,9 +34,11 @@ def factorize_matrix_fo(M_list, latent_dim, optimizer_class=optim.SGD, learning_
         reg_term = lambda_reg * (torch.norm(P) ** 2 + torch.norm(Q) ** 2)
         return avg_loss + reg_term
 
+    
+
     # Training loop
-    losses = []
-    gradient_norms = []
+    losses = []  # Include initial loss as the first entry
+    gradient_norms = []   # Gradient norm is zero before training begins
     for epoch in range(num_epochs):
         optimizer.zero_grad()
         loss = loss_function(M_list, P, Q)
@@ -59,6 +61,8 @@ def factorize_matrix_fo(M_list, latent_dim, optimizer_class=optim.SGD, learning_
 def factorize_matrix_mixed(M_list, latent_dim, optimizer_class=optim.SGD, learning_rate=0.01, num_epochs=1000, lambda_reg=0.01,
                            L=1.0, reg=0.0, variant="GradReg"):
     """Perform matrix factorization using mixed first-order and second-order optimization methods."""
+    import time
+
     d, _ = M_list[0].shape
     n = len(M_list)
     
@@ -84,13 +88,18 @@ def factorize_matrix_mixed(M_list, latent_dim, optimizer_class=optim.SGD, learni
     # Training loop
     losses = []
     gradient_norms = []
-    # Evaluate initial loss before training
-    initial_loss = loss_function(M_list, P, Q).item()
-    losses.append(initial_loss)
 
-    grad_norm = torch.norm(P.grad if P.grad is not None else torch.zeros_like(P)).item() + \
+    # Evaluate initial loss and gradient norms before training
+    with torch.no_grad():
+        initial_loss = loss_function(M_list, P, Q).item()
+        print(f"Initial Loss: {initial_loss:.6f}")
+        losses.append(initial_loss)
+
+        initial_grad_norm = (
+            torch.norm(P.grad if P.grad is not None else torch.zeros_like(P)).item() +
             torch.norm(Q.grad if Q.grad is not None else torch.zeros_like(Q)).item()
-    gradient_norms.append(grad_norm)
+        )
+        gradient_norms.append(initial_grad_norm)
 
     for epoch in range(num_epochs):
         train_start_time = time.time()
@@ -114,16 +123,19 @@ def factorize_matrix_mixed(M_list, latent_dim, optimizer_class=optim.SGD, learni
         loss_value = closure().item()
         losses.append(loss_value)
 
-        grad_norm = torch.norm(P.grad if P.grad is not None else torch.zeros_like(P)).item() + \
-                torch.norm(Q.grad if Q.grad is not None else torch.zeros_like(Q)).item()
+        grad_norm = (
+            torch.norm(P.grad if P.grad is not None else torch.zeros_like(P)).item() +
+            torch.norm(Q.grad if Q.grad is not None else torch.zeros_like(Q)).item()
+        )
         gradient_norms.append(grad_norm)
 
-        print(f"Epoch {epoch+1}/{num_epochs}, Loss: {loss_value:.6f}")
-
-        epoch_time = time.time() - train_start_time
         print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {loss_value:.6f}, Gradient Norm: {grad_norm:.6f}")
 
+        epoch_time = time.time() - train_start_time
+        print(f"Epoch Time: {epoch_time:.2f}s")
+
     return P, Q, losses, gradient_norms
+
 
 
 
@@ -134,8 +146,8 @@ def matrix_factorization_experiment(matrices, method="ADAM/ADAM",
                                     variant=None,
                                     L_values=[1.0], reg_values=[0.0], save_dir="results"):
     # Create subdirectories for logs and plots
-    logs_dir = os.path.join(save_dir, "logs")
-    plots_dir = os.path.join(save_dir, "plots")
+    logs_dir = os.path.join(save_dir, "MaF_logs")
+    plots_dir = os.path.join(save_dir, "MaF_plots")
     os.makedirs(logs_dir, exist_ok=True)
     os.makedirs(plots_dir, exist_ok=True)
 
@@ -160,7 +172,7 @@ def matrix_factorization_experiment(matrices, method="ADAM/ADAM",
 
                         # Store results for combined plotting
                         result = {
-                            "method": f"FO+SO, LR={lr}, Latent Dim={latent_dim}, L={L}, reg={reg}",
+                            "method": f"{method}, LR={lr}, Latent Dim={latent_dim}, L={L}, reg={reg}",
                             "losses": losses,
                             "gradient_norms": gradient_norms
                         }   
@@ -170,24 +182,7 @@ def matrix_factorization_experiment(matrices, method="ADAM/ADAM",
                         result_filename = os.path.join(logs_dir, f"results_{method}_LR_{lr}_LatentDim_{latent_dim}_L_{L}_reg_{reg}.pkl")
                         save_results_to_file(result, result_filename)
 
-                        # Plot and save individual results in plots folder
-                        plt.figure()
-                        plt.plot(range(num_epochs + 1), losses, label=f"LR {lr}, Latent Dim {latent_dim}, L {L}, reg {reg}")
-                        plt.xlabel('Epoch')
-                        plt.ylabel('Average Loss')
-                        plt.title(f'Loss Curve {method} LR {lr}, Latent Dim {latent_dim}, L {L}, reg {reg}')
-                        plt.legend()
-                        plt.savefig(os.path.join(plots_dir, f"loss_curve_{method}_LR_{lr}_LatentDim_{latent_dim}_L_{L}_reg_{reg}.png"))
-                        plt.close()
 
-                        plt.figure()
-                        plt.plot(range(num_epochs + 1), gradient_norms, label=f"LR {lr}, Latent Dim {latent_dim}, L {L}, reg {reg}")
-                        plt.xlabel('Epoch')
-                        plt.ylabel('Gradient Norm')
-                        plt.title(f'Gradient Norm {method} LR {lr}, Latent Dim {latent_dim}, L {L}, reg {reg}')
-                        plt.legend()
-                        plt.savefig(os.path.join(plots_dir, f"gradient_norm_{method}_LR_{lr}_LatentDim_{latent_dim}_L_{L}_reg_{reg}.png"))
-                        plt.close()
 
             else:
                 print(f"Running FO: LR {lr}, Latent Dim {latent_dim}")
@@ -205,7 +200,7 @@ def matrix_factorization_experiment(matrices, method="ADAM/ADAM",
 
                 # Store results for combined plotting
                 result = {
-                    "method": f"FO+SO, LR={lr}, Latent Dim={latent_dim}",
+                    "method": f"{method}, LR={lr}, Latent Dim={latent_dim}",
                     "losses": losses,
                     "gradient_norms": gradient_norms
                 }
@@ -215,24 +210,7 @@ def matrix_factorization_experiment(matrices, method="ADAM/ADAM",
                 result_filename = os.path.join(logs_dir, f"results_{method}_{lr}_LatentDim_{latent_dim}.pkl")
                 save_results_to_file(result, result_filename)
 
-                # Plot and save individual results in plots folder
-                plt.figure()
-                plt.plot(range(num_epochs), losses, label=f"LR {lr}, Latent Dim {latent_dim}")
-                plt.xlabel('Epoch')
-                plt.ylabel('Average Loss')
-                plt.title(f'Loss Curve {method} LR {lr}, Latent Dim {latent_dim}')
-                plt.legend()
-                plt.savefig(os.path.join(plots_dir, f"loss_curve_{method}_{lr}_LatentDim_{latent_dim}.png"))
-                plt.close()
 
-                plt.figure()
-                plt.plot(range(num_epochs ), gradient_norms, label=f"LR {lr}, Latent Dim {latent_dim}")
-                plt.xlabel('Epoch')
-                plt.ylabel('Gradient Norm')
-                plt.title(f'Gradient Norm {method} LR {lr}, Latent Dim {latent_dim}')
-                plt.legend()
-                plt.savefig(os.path.join(plots_dir, f"gradient_norm_{method}_LR_{lr}_LatentDim_{latent_dim}.png"))
-                plt.close()
 
     return all_results
 

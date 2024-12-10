@@ -12,6 +12,11 @@ This project explores an **alternating optimization approach** for training neur
 - **Layered Optimization Structure**: 
 
 ---
+## Requirements
+
+- All required Python packages can be found in `requirements.txt`. Install by using:
+  ```bash
+  pip install -r requirements.txt
 
 ## Running the Code
 

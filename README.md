@@ -2,9 +2,9 @@
 
 ## Overview
 
-This project explores an **alternating optimization approach** for training neural networks. It leverages:
-- **First-order methods** for the majority of layers, ensuring computational efficiency.
-- **Second-order updates** for the final layer, achieving high precision where it matters most.
+This project explores an **alternating optimization approach** for training neural networks. We apply:
+- **First-order methods** for the majority of layers.
+- **Second-order updates** for the final layer.
 
 ### Key Highlights:
 - **Scalability & Convergence Accuracy**: Balances computational efficiency and precise optimization for large-scale training.

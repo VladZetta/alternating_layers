@@ -12,19 +12,19 @@ This project explores an **alternating optimization approach** for training neur
 ### Results
 
 #### Matrix Factorization
-Here is an example result for **Matrix Factorization**
+Here are results for **Matrix Factorization**
 
 ![Matrix Factorization Results](results/final_plots/MaF17.png)
 
 #### Attention Layer
-Here is an example result for **Attention Layer** optimization
+Results for **Attention Layer** optimization
 
 ![Attention Layer Results](results/final_plots/attention_loss.png)
 
 #### LeNet-5 Training
-Here is an example result for **LeNet-5 Training** with the Adam optimizer:
+Here is an example result for **LeNet-5 Training** 
 
-![LeNet-5 Training Results](images/lenet5_training_result.png)
+![LeNet-5 Training Results](results/final_plots/test_accuracy_bs_64.png)
 
 ---
 ## Requirements

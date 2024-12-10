@@ -41,6 +41,8 @@ The experiments can be executed using the `run.py` or `run_lenet.py` files depen
 - For Matrix Factorization or Attention Layer experiments:
   ```bash
   python run.py --experiment <experiment_name> --config <path_to_config_file>
+For the matrix factorization it is possible to provide your own dataset as .h5 file, otherwise a list with random matrices will be used.
+
 - For LeNet-5 Training:
   ```bash
   python run_lenet.py --config <path_to_config_file>
@@ -49,6 +51,7 @@ The experiments can be executed using the `run.py` or `run_lenet.py` files depen
 - To run Matrix Factorization with adam and gradreg methods:
   ```bash
   python run.py --experiment matrix_factorization --config configs/matrix_factorization/adam+gradreg.yaml
+  
 - To run Attention Layer optimization with gradient descent:
   ```bash
   python run.py --experiment attention_layer --config configs/attention_layer/attention_GD.yaml

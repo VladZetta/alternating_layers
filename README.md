@@ -9,7 +9,7 @@ This project explores an **alternating optimization approach** for training neur
 ### Key Highlight:
 - **Faster Convergence with Second-Order Methods**: Second-order methods significantly reduce the number of epochs needed to achieve better results. However, they are more computationally intensive than first-order methods and require more hyperparameters to tune.
 
-- **Layered Optimization Structure**: 
+
 
 ---
 ## Requirements
